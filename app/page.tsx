@@ -20,7 +20,7 @@ export default function Home() {
             <SearchBar />
           </div>
 
-          <div className="px-8 lg:px-0">
+          <div className="px-8 mt-6 md:mt-8 lg:px-0 pb-16">
             <Image
               src={uberImage}
               height={800}
