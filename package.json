@@ -9,15 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "framer-motion": "^11.1.5",
     "next": "14.2.1",
+    "next-auth": "^5.0.0-beta.16",
     "react": "^18",
     "react-datepicker": "^6.9.0",
     "react-dom": "^18",
     "react-tilt": "^1.0.2",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "zod": "^3.22.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-datepicker": "^6.2.0",
