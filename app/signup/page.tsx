@@ -1,7 +1,8 @@
 // import { Sign } from 'crypto'
-"use-client";
+
 import React from "react";
 import SignupForm from "./SignupForm";
+import { useRouter } from 'next/router';
 
 const page = () => {
   return (

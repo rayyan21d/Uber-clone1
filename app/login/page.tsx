@@ -1,10 +1,22 @@
-import React from 'react';
-import LoginForm from '@/app/login/loginform'; // Import the loginForm component
+'use client'
+import React, { useState } from 'react';
+import { z } from 'zod';
+import { ToastContainer,toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { login} from './actions'
+import Loginform from './loginform';
 
-export default function page() {
-    return (
+
+
+
+export default function Page() {
+    
+
+    return (<>
         <div className='flex w-screen h-screen items-center justify-center'>
-            <LoginForm /> 
+        <ToastContainer className="absolute" position='top-right'/>
+            <Loginform/>
         </div>
+    </>
     );
 }
