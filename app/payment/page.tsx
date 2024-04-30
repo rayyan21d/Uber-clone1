@@ -10,17 +10,7 @@ const Payment = () => {
   const searchParams = useSearchParams();
   const amountString = searchParams.get("amount");
 
-  if (!amountString) {
-    // Handle missing amount
-    return <div>Error: Missing amount</div>;
-  }
-
-  const amount = parseFloat(amountString);
-
-  if (isNaN(amount)) {
-    // Handle invalid amount
-    return <div>Error: Invalid amount</div>;
-  }
+  const amount = parseFloat(amountString || "");
 
   console.log("Amount", amount);
 

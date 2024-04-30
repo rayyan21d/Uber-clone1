@@ -1,13 +1,14 @@
+"use server";
+
 import { NextResponse, NextRequest } from "next/server";
 import Stripe from "stripe";
-import Error from "next/error";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
-  apiVersion: "2024-04-10",
+  apiVersion: "2023-10-16",
 });
 
-export async function POST(request: NextRequest) {
+export async function POST(request: any) {
   const data: any = await request.json();
 
   const amount = data.amount;
@@ -29,13 +30,15 @@ export async function POST(request: NextRequest) {
         },
       },
     });
+
+    console.log("Payment Intent", paymentIntent);
+
     return NextResponse.json(paymentIntent.client_secret, {
       status: 200,
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 400 }
-    );
+    return new NextResponse(error, {
+      status: 402,
+    });
   }
 }
