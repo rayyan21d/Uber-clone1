@@ -28,10 +28,16 @@ export async function signup(formData: FormData) {
 
   const { error } = await supabase.auth.signUp(data)
 
-  if (error) {
-    console.log('error', error)
+  if (error ) {
+    if(error.message.includes('User already registered')){
+      
+      console.log('Invalid email or password')
+      return {message:'User already registered'}
+    }
+    else{
+      console.log('error', error.message)
 
-    console.log('Invalid email or password')
+    }
   }
   else {
     // toast.success('Sign Up Successful');
@@ -48,5 +54,6 @@ export async function signup(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
+  return {message:'signup successful'}
 
 }

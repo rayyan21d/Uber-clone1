@@ -1,11 +1,12 @@
-import React from "react";
+'use client'
+import React,{useState,useEffect} from "react";
 import { redirect } from "next/navigation";
 import reddit from "next-auth/providers/reddit";
 import { SupabaseAuthClient } from "@supabase/supabase-js/dist/module/lib/SupabaseAuthClient";
 
-const page = () => {
-  const [authenticated, setAuthenticated] = React.useState(false);
-  React.useEffect(() => {
+const Page = () => {
+  const [authenticated, setAuthenticated] = useState(false);
+  useEffect(() => {
     setAuthenticated(true);
   }, []);
   if(!authenticated) {
@@ -14,4 +15,4 @@ const page = () => {
   return <div>page</div>;
 };
 
-export default page;
+export default Page;

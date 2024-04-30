@@ -19,7 +19,7 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    toast.error('Invalid email or password')
+    console.log('Invalid email or password')
   }
 
   revalidatePath('/', 'layout')
