@@ -1,7 +1,12 @@
-"use client";
-
-import React, { useState, useCallback, useEffect, useContext } from "react";
-import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  DirectionsRenderer,
+  GoogleMap,
+  Marker,
+  MarkerF,
+  OverlayView,
+  useJsApiLoader,
+} from "@react-google-maps/api";
 import { sourceContext } from "@/app/context/sourceContext";
 import { destinationContext } from "@/app/context/destinationContext";
 
@@ -11,80 +16,102 @@ const containerStyle = {
 };
 
 const MapSection = () => {
-  const [map, setMap] = useState(null);
-  const [center, setCenter] = useState({
-    lat: 17.4,
-    lng: 78.47,
-  });
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [center, setCenter] = useState({ lat: 17.4, lng: 78.47 });
 
-  const { source, setSource } = useContext(sourceContext);
-  const { destination, setDestination } = useContext(destinationContext);
-
-  useEffect(() => {
-    console.log("Inside Map Section", source);
-
-    if (source.lat && source.lng && map) {
-      map.panTo({
-        lat: source.lat,
-        lng: source.lng,
-      });
-
-      setCenter({
-        lat: source.lat,
-        lng: source.lng,
-      });
-    }
-
-    console.log("Center is set to ", { lat: source.lat, lng: source.lng });
-  }, [source]);
+  const { source, setSource } = useContext(sourceContext) || {
+    source: null,
+    setSource: () => {},
+  };
+  const { destination, setDestination } = useContext(destinationContext) || {
+    destination: null,
+    setDestination: () => {},
+  };
+  const [
+    directions,
+    setDirections,
+  ] = useState<google.maps.DirectionsResult | null>(null);
 
   useEffect(() => {
-    console.log("Inside Map Section", destination);
-
-    if (destination.lat && destination.lng && map) {
-      map.panTo({
-        lat: source.lat,
-        lng: source.lng,
-      });
-      setCenter({
-        lat: destination.lat,
-        lng: destination.lng,
-      });
+    if (source && source.lat && source.lng && map) {
+      map.panTo({ lat: source.lat, lng: source.lng });
+      setCenter({ lat: source.lat, lng: source.lng });
     }
 
-    console.log("Center is set to ", { lat: source.lat, lng: source.lng });
-  }, [destination]);
+    if (source && destination) {
+      getDirections();
+    }
+  }, [source, destination, map]);
 
-  // const onLoad = useCallback(function callback(map: google.maps.Map | null) {
-  //   // This is just an example of getting and using the map instance!!! don't just blindly copy!
-  //   const bounds = new window.google.maps.LatLngBounds(center);
-  //   map.fitBounds(bounds);
+  const getDirections = () => {
+    if (!source || !destination) return;
 
-  //   setMap(map);
-  // }, []);
+    const directionsService = new google.maps.DirectionsService();
 
-  // const onUnmount = useCallback(function callback(map) {
-  //   setMap(null);
-  // }, []);
+    directionsService.route(
+      {
+        origin: { lat: source.lat, lng: source.lng },
+        destination: { lat: destination.lat, lng: destination.lng },
+        travelMode: google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          setDirections(result);
+        } else {
+          console.log("Error in getting directions");
+        }
+      }
+    );
+  };
 
   return (
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={10}
+      zoom={13}
       onLoad={(map) => setMap(map)}
-      // onUnmount={onUnmount}
     >
-      <MarkerF
-        position={{ lat: source.lat, lng: source.lng }}
-        icon={{
-          url: "/Images/lad.jpg",
-          scaledSize: {
-            width: 20,
-            height: 20,
-          },
-        }}
-      />
+      {source && (
+        <MarkerF
+          position={{ lat: source.lat, lng: source.lng }}
+          icon={{
+            url: "/Images/city.jpg",
+            scaledSize: {
+              width: 20,
+              height: 20,
+              equals: () => true,
+            },
+          }}
+        />
+      )}
+
+      {destination && (
+        <Marker
+          position={{ lat: destination.lat, lng: destination.lng }}
+          icon={{
+            url: "/Images/city.jpg",
+            scaledSize: {
+              width: 20,
+              height: 20,
+              equals: () => true,
+            },
+          }}
+        />
+      )}
+
+      {directions && (
+        <DirectionsRenderer
+          directions={directions}
+          options={{
+            suppressMarkers: true,
+            polylineOptions: {
+              strokeColor: "black",
+              strokeOpacity: 1,
+              strokeWeight: 4,
+            },
+          }}
+        />
+      )}
     </GoogleMap>
   );
 };

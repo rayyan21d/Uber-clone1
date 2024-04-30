@@ -3,8 +3,11 @@
 import React, { useState } from "react";
 import uberImage from "@/public/Images/uber.jpg";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const SearchBar = () => {
+  const router = useRouter();
+
   const [pickUp, setPickUp] = useState("");
   const [destination, setDestination] = useState("");
   const [showDropDown, setShowDropDown] = useState(false);
@@ -46,7 +49,12 @@ const SearchBar = () => {
         <div className="absolute bg-white ml-6 mt-7 h-14 min-w-[0.5px] "> </div>
       </div>
       <div>
-        <button className="bg-white text-black font-semibold px-6 py-2 rounded-lg ">
+        <button
+          className="bg-white text-black font-semibold px-6 py-2 rounded-lg "
+          onClick={() => {
+            router.push("/go");
+          }}
+        >
           See Prices
         </button>
       </div>

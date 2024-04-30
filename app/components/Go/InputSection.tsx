@@ -8,60 +8,78 @@ interface InputSectionProps {
 }
 
 export const InputSection: React.FC<InputSectionProps> = ({ InputType }) => {
-  const [value, setValue] = useState("After relod");
+  const [value, setValue] = useState<any | null>(null);
   const [placeholder, setPlaceholder] = useState<string | null>(null);
 
-  const { source, setSource } = useContext(sourceContext);
-  const { destination, setDestination } = useContext(destinationContext);
+  const sourceContextValue = useContext(sourceContext);
+  const destinationContextValue = useContext(destinationContext);
 
-  const getLatAndLng = async (place, type) => {
-    // Since the
-    console.log("Long and Lang??");
-    const placeId = await place.value.place_id;
-    const service = new google.maps.places.PlacesService(
-      document.createElement("div")
-    );
+  // Ensure that context values are not null before destructuring
+  const { source, setSource } = sourceContextValue || {};
+  const { destination, setDestination } = destinationContextValue || {};
 
-    service.getDetails({ placeId }, (place, status) => {
-      if (status === "OK" && place.geometry && place.geometry.location) {
-        if (type == "PickUp") {
-          setSource({
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng(),
-            name: place?.formatted_address,
-            label: place?.name,
-          });
+  // Declare the types of place and type
+  interface PlaceInterface {
+    label: string;
+    value: {
+      place_id: string;
+    };
+  }
+
+  const getLatAndLng = async (place: PlaceInterface, type: string) => {
+    if (place != null && setSource && setDestination) {
+      const placeId = await place.value.place_id;
+      const service = new google.maps.places.PlacesService(
+        document.createElement("div")
+      );
+
+      service.getDetails({ placeId }, (place, status) => {
+        if (
+          place != null &&
+          status === "OK" &&
+          place.geometry &&
+          place.geometry.location
+        ) {
+          if (type === "PickUp" && setSource) {
+            setSource({
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng(),
+              name: place?.formatted_address,
+              label: place?.name,
+            });
+          } else if (setDestination) {
+            setDestination({
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng(),
+              name: place?.formatted_address,
+              label: place?.name,
+            });
+          }
         } else {
-          setDestination({
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng(),
-            name: place?.formatted_address,
-            label: place?.name,
-          });
+          console.log("Error in fetching longitude and latitude");
         }
-      } else {
-        console.log("Error in getting the location");
-      }
-    });
+      });
+    }
   };
 
   useEffect(() => {
-    return InputType == "PickUp"
-      ? setPlaceholder("PickUp Location")
-      : setPlaceholder("DropOff Location");
-  }, []);
+    setPlaceholder(
+      InputType === "PickUp" ? "PickUp Location" : "DropOff Location"
+    );
+  }, [InputType]);
 
   return (
     <div>
       <GooglePlacesAutocomplete
         selectProps={{
           value: value,
-          onChange: (place) => {
-            console.log(place);
-            getLatAndLng(place, InputType);
-            setValue(place.value);
+          onChange: (newValue) => {
+            if (newValue != null) {
+              getLatAndLng(newValue, InputType);
+            }
+            setValue(newValue);
           },
-          placeholder: placeholder,
+          placeholder: placeholder || "",
           isClearable: true,
           styles: {
             control: (provided) => ({

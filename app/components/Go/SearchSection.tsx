@@ -6,16 +6,28 @@ import { set } from "zod";
 import { InputSection } from "./InputSection";
 import { sourceContext } from "../../context/sourceContext";
 import { destinationContext } from "../../context/destinationContext";
+import ChooseRide from "./ChooseRide";
 
 const SearchSection = () => {
-  const { source, setSource } = useContext(sourceContext);
-  const { destination, setDestination } = useContext(destinationContext);
+  const { source, setSource } = useContext(sourceContext) || {
+    source: { lat: 0, lng: 0 },
+    setSource: () => {},
+  };
+  const { destination, setDestination } = useContext(destinationContext) || {
+    destination: { lat: 0, lng: 0 },
+    setDestination: () => {},
+  };
+  const [distance, setDistance] = useState<number>(0);
 
-  useEffect(() => {
-    console.log("Inside Search Section");
-    console.log(source);
-    console.log(destination);
-  }, [source, destination]);
+  const calculateDistance = () => {
+    const distance = google.maps.geometry.spherical.computeDistanceBetween(
+      { lat: source.lat, lng: source.lng },
+      { lat: destination.lat, lng: destination.lng }
+    );
+
+    console.log(distance * 0.0006213);
+    setDistance(distance * 0.0006213);
+  };
 
   return (
     <div>
@@ -29,10 +41,19 @@ const SearchSection = () => {
         </div>
 
         <div className="">
-          <button className="mt-6 mb-2 bg-black text-lg rounded-lg text-white p-2 w-full">
+          <button
+            className="mt-6 mb-2 bg-black text-lg rounded-lg text-white p-2 w-full"
+            onClick={() => {
+              calculateDistance();
+            }}
+          >
             Search
           </button>
         </div>
+      </div>
+
+      <div className={`${distance != 0 ? "visible" : "hidden"}`}>
+        <ChooseRide dist={distance} />
       </div>
     </div>
   );
