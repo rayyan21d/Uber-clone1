@@ -51,6 +51,7 @@ export async function signup(formData: FormData) {
       console.log('inserted');
     }
     console.log('signup Successful');
+    return {message:'signup successful'}
   }
 
   revalidatePath('/', 'layout')

@@ -9,8 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.12.1",
+    "@react-google-maps/api": "^2.19.3",
+    "@stripe/react-stripe-js": "^2.7.0",
+    "@stripe/stripe-js": "^3.3.0",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.42.6",
+    "@vercel/postgres": "^0.8.0",
     "bcrypt": "^5.1.1",
     "framer-motion": "^11.1.5",
     "next": "14.2.1",
@@ -18,9 +23,11 @@
     "react": "^18",
     "react-datepicker": "^6.9.0",
     "react-dom": "^18",
+    "react-google-places-autocomplete": "^4.0.1",
     "react-tilt": "^1.0.2",
     "react-toastify": "^10.0.5",
     "sharp": "^0.33.3",
+    "stripe": "^15.4.0",
     "styled-components": "^6.1.8",
     "zod": "^3.22.5"
   },
