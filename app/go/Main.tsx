@@ -3,21 +3,26 @@
 import React, { useState } from "react";
 import SearchSection from "../components/Go/SearchSection";
 import MapSection from "../components/Go/MapSection";
-import { LoadScript } from "@react-google-maps/api";
+// import { LoadScript } from "@react-google-maps/api";
 import { sourceContext } from "../context/sourceContext";
 import { destinationContext } from "../context/destinationContext";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 const Main = () => {
   const [source, setSource] = useState({ lat: 0, lng: 0 });
   const [destination, setDestination] = useState({ lat: 0, lng: 0 });
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyB5yesERjHZgbF8iARl6xpsSehxoIj1IZw",
+    libraries: ["places"],
+  });
+
   return (
-    <div className=" lg:mx-10 mt-8 h-full min-h-screen">
-      <sourceContext.Provider value={{ source, setSource }}>
-        <destinationContext.Provider value={{ destination, setDestination }}>
-          <LoadScript
-            libraries={["places"]}
-            googleMapsApiKey={process.env.NEXT_PUBLIC_PLACES_API_KEY || ""}
-          >
+    isLoaded && (
+      <div className=" lg:mx-10 mt-8 h-full min-h-screen">
+        <sourceContext.Provider value={{ source, setSource }}>
+          <destinationContext.Provider value={{ destination, setDestination }}>
             <div className="grid grid-cols-1 lg:grid-cols-7 gap-4">
               <div className="lg:col-span-2">
                 <SearchSection />
@@ -32,10 +37,10 @@ const Main = () => {
                 </div>
               </div>
             </div>
-          </LoadScript>
-        </destinationContext.Provider>
-      </sourceContext.Provider>
-    </div>
+          </destinationContext.Provider>
+        </sourceContext.Provider>
+      </div>
+    )
   );
 };
 

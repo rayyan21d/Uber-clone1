@@ -5,7 +5,7 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   typescript: true,
-  apiVersion: "2023-10-16",
+  apiVersion: "2024-04-10",
 });
 
 export async function POST(request: any) {
@@ -37,7 +37,7 @@ export async function POST(request: any) {
       status: 200,
     });
   } catch (error) {
-    return new NextResponse(error, {
+    return new NextResponse(JSON.stringify({ err: error }), {
       status: 402,
     });
   }

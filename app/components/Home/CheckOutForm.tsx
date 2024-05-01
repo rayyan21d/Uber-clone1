@@ -6,7 +6,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useRouter } from "next/navigation";
 
-function CheckOutForm({ amount }) {
+function CheckOutForm({ amount }: { amount: number }) {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
