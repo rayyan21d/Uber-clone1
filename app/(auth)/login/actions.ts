@@ -19,10 +19,10 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    console.log(" has occured", error);
+    console.log('Invalid email or password')
   }
 
   revalidatePath('/', 'layout')
-  redirect('/go')
+  redirect('/')
 }
 

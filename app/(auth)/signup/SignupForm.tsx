@@ -41,8 +41,13 @@ const SignupForm: React.FC<SignupFormProps> = () => {
     formdatatosend.append('dob', formData.dob);
 
     try {
-      await signup(formdatatosend);
-      toast.success('Sign Up Successful');
+      let x=await signup(formdatatosend);
+      if(x.message==='User already registered'){
+        toast.error('User already registered');
+
+      }else{
+        toast.success('Sign Up Successful');
+      }
       setFormData({
         fullName: '',
         email: '',

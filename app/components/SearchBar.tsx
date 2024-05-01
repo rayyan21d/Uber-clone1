@@ -12,8 +12,8 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 const SearchBar = () => {
   const router = useRouter();
 
-  const [pickUp, setPickUp] = useState("");
-  const [destination, setDestination] = useState("");
+  const [source, setSource] = useState<any>("");
+  const [destination, setDestination] = useState<any>("");
   const [showDropDown, setShowDropDown] = useState(false);
 
   return (
@@ -32,7 +32,7 @@ const SearchBar = () => {
                 <GooglePlacesAutocomplete
                   selectProps={{
                     value: source,
-                    onChange: (value) => setSource(value.value),
+                    onChange: (value) => setSource(value?.value),
                     placeholder: "Enter PickUp",
                     isClearable: true,
                     styles: {
@@ -59,7 +59,7 @@ const SearchBar = () => {
                 <GooglePlacesAutocomplete
                   selectProps={{
                     value: destination,
-                    onChange: (value) => setDestination(value.value),
+                    onChange: (value) => setDestination(value?.value),
                     placeholder: "Enter Destination",
                     isClearable: true,
 
