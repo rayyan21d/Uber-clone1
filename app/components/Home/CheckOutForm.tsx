@@ -4,27 +4,23 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { useRouter } from "next/navigation";
 
-function CheckOutForm({ amount }: { amount: number }) {
+const CheckOutForm: React.FC<{ amount: number }> = ({ amount }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const router = useRouter();
-
-  console.log(amount);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (elements == null) {
-    //   return;
-    // }
+    if (!stripe || !elements) {
+      return;
+    }
 
-    // const { error: submitError } = await elements.submit();
-    // if (submitError) {
-    //   return;
-    // }
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      return;
+    }
 
-    const result = await fetch("/api/create-intent/", {
+    const result = await fetch("/api/create-intent", {
       method: "POST",
       body: JSON.stringify({
         amount: amount,
@@ -34,21 +30,18 @@ function CheckOutForm({ amount }: { amount: number }) {
     const secretKey = await result.json();
     console.log("Secret Key", secretKey);
 
-    // const error = await stripe.confirmPayment({
-    //   clientSecret: secretKey,
-    //   elements: elements,
-    //   confirmParams: {
-    //     return_url: "https://localhost:3000/",
-    //     //
-    //   },
-    // });
+    const error = await stripe.confirmPayment({
+      clientSecret: secretKey,
+      elements: elements,
+      confirmParams: {
+        return_url: "http://localhost:3000/",
+        //
+      },
+    });
 
-    // if (error) {
-    //   console.log("Error", error);
-    //   router.push("/go");
-    // }
-
-    router.push("/go");
+    if (error) {
+      console.log("Error", error);
+    }
   };
 
   return (
@@ -66,6 +59,6 @@ function CheckOutForm({ amount }: { amount: number }) {
       </div>
     </div>
   );
-}
+};
 
 export default CheckOutForm;

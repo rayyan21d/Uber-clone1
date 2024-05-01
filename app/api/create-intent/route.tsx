@@ -1,14 +1,14 @@
-"use server";
-
 import { NextResponse, NextRequest } from "next/server";
 import Stripe from "stripe";
+import Error from "next/error";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   typescript: true,
+  apiVersion: "2024-04-10",
   apiVersion: "2024-04-10",
 });
 
-export async function POST(request: any) {
+export async function POST(request: NextRequest) {
   const data: any = await request.json();
 
   const amount = data.amount;
@@ -30,9 +30,6 @@ export async function POST(request: any) {
         },
       },
     });
-
-    console.log("Payment Intent", paymentIntent);
-
     return NextResponse.json(paymentIntent.client_secret, {
       status: 200,
     });

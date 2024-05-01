@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import uberImage from "@/public/Images/uber.jpg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -12,8 +12,9 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 const SearchBar = () => {
   const router = useRouter();
 
-  const [source, setSource] = useState(null);
-  const [destination, setDestination] = useState(null);
+  const [pickUp, setPickUp] = useState("");
+  const [destination, setDestination] = useState("");
+  const [showDropDown, setShowDropDown] = useState(false);
 
   return (
     <>
