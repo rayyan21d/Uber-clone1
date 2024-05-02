@@ -5,7 +5,6 @@ import Error from "next/error";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   typescript: true,
   apiVersion: "2024-04-10",
-  apiVersion: "2024-04-10",
 });
 
 export async function POST(request: NextRequest) {

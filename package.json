@@ -15,6 +15,7 @@
     "@stripe/stripe-js": "^3.3.0",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.42.6",
+    "@vercel/postgres": "^0.8.0",
     "bcrypt": "^5.1.1",
     "framer-motion": "^11.1.5",
     "next": "14.2.1",
